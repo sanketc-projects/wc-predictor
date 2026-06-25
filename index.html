@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>World Cup Predictor Leaderboard</title>
+    <meta name="description" content="A fast, beautiful leaderboard for your FIFA World Cup predictor pool." />
+    <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+    <div class="background-orb orb-1"></div>
+    <div class="background-orb orb-2"></div>
+
+    <header class="hero">
+        <p class="eyebrow">FIFA World Cup Predictor • DeFiRate pool</p>
+        <h1>World Cup Predictor Leaderboard</h1>
+        <p class="lead">
+            A fast, polished, client-side leaderboard for your group. Update the JSON
+            file whenever new results arrive and the page refreshes instantly.
+        </p>
+        <div class="hero-meta">
+            <span class="pill">Frozen predictions</span>
+            <span class="pill">Client-side only</span>
+            <span class="pill" id="last-updated">Loading…</span>
+        </div>
+    </header>
+
+    <main class="app-shell">
+        <section class="panel top3-panel">
+            <div class="panel-header">
+                <div>
+                    <p class="section-kicker">Current standings</p>
+                    <h2>Top performers</h2>
+                </div>
+                <p class="muted">Sorted by score with quick search and filters.</p>
+            </div>
+            <div id="top3" class="top3-grid"></div>
+        </section>
+
+        <section class="panel controls-panel">
+            <div class="controls">
+                <label class="input-wrap">
+                    <span>Search</span>
+                    <input id="search" type="search" placeholder="Search player…" />
+                </label>
+                <label class="input-wrap">
+                    <span>Sort by</span>
+                    <select id="sort-by">
+                        <option value="score">Score</option>
+                        <option value="correct">Correct picks</option>
+                        <option value="name">Name</option>
+                        <option value="rank">Rank</option>
+                    </select>
+                </label>
+                <label class="input-wrap">
+                    <span>Direction</span>
+                    <select id="sort-direction">
+                        <option value="desc">Descending</option>
+                        <option value="asc">Ascending</option>
+                    </select>
+                </label>
+            </div>
+            <div id="summary" class="summary"></div>
+        </section>
+
+        <section class="panel table-panel">
+            <div class="panel-header">
+                <div>
+                    <p class="section-kicker">Leaderboard</p>
+                    <h2>Full standings</h2>
+                </div>
+                <p class="muted">Data is sourced from a local JSON file for easy updates.</p>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Player</th>
+                            <th>Score</th>
+                            <th>Correct</th>
+                            <th>Momentum</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboard-body"></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
