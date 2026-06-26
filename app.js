@@ -394,27 +394,34 @@ function renderLeaderboard(entries) {
     }
 
         leaderboardBody.innerHTML = `
-            <div class="leaderboard-table-head" aria-hidden="true">
-                <span>Rank</span>
-                <span>Player</span>
-                <span>Pts</span>
-            </div>
-        ` + entries
-        .map((entry) => {
+            <table class="leaderboard-table">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Player</th>
+                        <th>Pts</th>
+                        <th class="desktop-only">Correct</th>
+                        <th class="desktop-only">Breakdown</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${entries.map((entry) => {
             const active = entry.id === state.selectedId ? ' is-selected' : '';
             return `
-      <button class="leaderboard-row${active}" type="button" data-player-id="${escapeHtml(entry.id)}">
-        <span class="rank-badge">#${entry.rank}</span>
-        <span class="player-summary">
-          <strong>${escapeHtml(entry.name)}</strong>
-          <span>${entry.correctPicks} correct picks</span>
-        </span>
-        <span class="score-badge">${entry.score}<small>pts</small></span>
-        <span class="row-breakdown">${renderBreakdown(entry)}</span>
-      </button>
-    `;
-        })
-        .join('');
+                            <tr class="leaderboard-row${active}" data-player-id="${escapeHtml(entry.id)}">
+                                <td class="rank-cell">#${entry.rank}</td>
+                                <td class="player-cell">
+                                    <button type="button" class="player-select" data-player-id="${escapeHtml(entry.id)}">${escapeHtml(entry.name)}</button>
+                                </td>
+                                <td class="score-cell">${entry.score}</td>
+                                <td class="correct-cell desktop-only">${entry.correctPicks}</td>
+                                <td class="breakdown-cell desktop-only"><div class="row-breakdown">${renderBreakdown(entry)}</div></td>
+                            </tr>
+                        `;
+                }).join('')}
+                </tbody>
+            </table>
+        `;
 }
 
 function filterPredictionItems(items) {
