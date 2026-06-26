@@ -1,0 +1,10 @@
+{
+    "name": "wc-predictor-leaderboard",
+    "version": "1.0.0",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "sync:defirate": "node scripts/sync-defirate.mjs",
+        "serve": "python3 -m http.server 8000"
+    }
+}

@@ -1,0 +1,38 @@
+{
+    "updatedAt": "2026-06-25",
+    "notes": "Only enter finalized results here. Group results list final 1st, 2nd, and 3rd place teams by team code. Knockout winners are keyed by match code from DeFiRate tournament data.",
+    "groups": {
+        "A": [
+            "MEX",
+            "RSA",
+            "KOR"
+        ],
+        "B": [
+            "SUI",
+            "CAN",
+            "BIH"
+        ],
+        "C": [
+            "BRA",
+            "MAR",
+            "SCO"
+        ],
+        "D": [
+            "USA",
+            "AUS",
+            "PAR"
+        ],
+        "E": [
+            "GER",
+            "CIV",
+            "ECU"
+        ],
+        "F": [
+            "NED",
+            "JPN",
+            "SWE"
+        ]
+    },
+    "thirdAdvancers": [],
+    "matches": {}
+}

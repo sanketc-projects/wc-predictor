@@ -10,46 +10,34 @@
 </head>
 
 <body>
-    <div class="background-orb orb-1"></div>
-    <div class="background-orb orb-2"></div>
-
-    <header class="hero">
-        <p class="eyebrow">FIFA World Cup Predictor • DeFiRate pool</p>
-        <h1>World Cup Predictor Leaderboard</h1>
-        <p class="lead">
-            A fast, polished, client-side leaderboard for your group. Update the JSON
-            file whenever new results arrive and the page refreshes instantly.
-        </p>
-        <div class="hero-meta">
-            <span class="pill">Frozen predictions</span>
-            <span class="pill">Client-side only</span>
-            <span class="pill" id="last-updated">Loading…</span>
-        </div>
-    </header>
+    <div class="field-glow glow-left"></div>
+    <div class="field-glow glow-right"></div>
 
     <main class="app-shell">
-        <section class="panel top3-panel">
-            <div class="panel-header">
+        <section class="panel leaderboard-panel">
+            <div class="scoreboard-header">
                 <div>
-                    <p class="section-kicker">Current standings</p>
-                    <h2>Top performers</h2>
+                    <p class="eyebrow">World Cup Predictor</p>
+                    <h1>Leaderboard</h1>
+                    <p class="lead">Live local scoring from frozen picks and confirmed results.</p>
                 </div>
-                <p class="muted">Sorted by score with quick search and filters.</p>
+                <div class="scoreboard-meta">
+                    <span class="pill">Frozen picks</span>
+                    <span class="pill">Local scoring</span>
+                    <span class="pill" id="last-updated">Loading…</span>
+                </div>
             </div>
-            <div id="top3" class="top3-grid"></div>
-        </section>
-
-        <section class="panel controls-panel">
+            <div id="summary" class="summary"></div>
             <div class="controls">
-                <label class="input-wrap">
+                <label class="input-wrap search-wrap">
                     <span>Search</span>
-                    <input id="search" type="search" placeholder="Search player…" />
+                    <input id="search" type="search" placeholder="Find a player" />
                 </label>
                 <label class="input-wrap">
                     <span>Sort by</span>
                     <select id="sort-by">
                         <option value="score">Score</option>
-                        <option value="correct">Correct picks</option>
+                        <option value="correctPicks">Correct picks</option>
                         <option value="name">Name</option>
                         <option value="rank">Rank</option>
                     </select>
@@ -62,31 +50,58 @@
                     </select>
                 </label>
             </div>
-            <div id="summary" class="summary"></div>
+            <div id="leaderboard-body" class="leaderboard-list"></div>
         </section>
 
-        <section class="panel table-panel">
+        <section class="panel player-panel">
             <div class="panel-header">
                 <div>
-                    <p class="section-kicker">Leaderboard</p>
-                    <h2>Full standings</h2>
+                    <p class="section-kicker">Selected Player</p>
+                    <h2>Prediction Review</h2>
                 </div>
-                <p class="muted">Data is sourced from a local JSON file for easy updates.</p>
+                <p class="muted">Green is right, red is wrong, gray is still pending.</p>
             </div>
-            <div class="table-wrap">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Rank</th>
-                            <th>Player</th>
-                            <th>Score</th>
-                            <th>Correct</th>
-                            <th>Momentum</th>
-                        </tr>
-                    </thead>
-                    <tbody id="leaderboard-body"></tbody>
-                </table>
+            <div id="selected-player" class="selected-player"></div>
+        </section>
+
+        <section class="panel compare-panel">
+            <div class="panel-header">
+                <div>
+                    <p class="section-kicker">Head To Head</p>
+                    <h2>Compare Picks</h2>
+                </div>
+                <p class="muted">Spot shared instincts and risky disagreements.</p>
             </div>
+            <div class="compare-controls">
+                <label class="input-wrap">
+                    <span>Player A</span>
+                    <select id="compare-a"></select>
+                </label>
+                <label class="input-wrap">
+                    <span>Player B</span>
+                    <select id="compare-b"></select>
+                </label>
+                <label class="input-wrap">
+                    <span>View</span>
+                    <select id="compare-filter">
+                        <option value="all">All picks</option>
+                        <option value="different">Differences only</option>
+                        <option value="same">Same picks only</option>
+                    </select>
+                </label>
+            </div>
+            <div id="compare-output" class="compare-output"></div>
+        </section>
+
+        <section class="panel scoring-panel">
+            <div class="panel-header">
+                <div>
+                    <p class="section-kicker">Scoring</p>
+                    <h2>Point system</h2>
+                </div>
+                <p class="muted">Update results in JSON as the tournament progresses.</p>
+            </div>
+            <div id="scoring-rules" class="rules-grid"></div>
         </section>
     </main>
 
