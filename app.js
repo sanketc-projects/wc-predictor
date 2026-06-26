@@ -54,10 +54,31 @@ const compareFilterSelect = document.getElementById('compare-filter');
 const compareOutput = document.getElementById('compare-output');
 const summaryContainer = document.getElementById('summary');
 const scoringRulesContainer = document.getElementById('scoring-rules');
+const playerDetails = document.getElementById('player-details');
+const compareDetails = document.getElementById('compare-details');
+const scoringDetails = document.getElementById('scoring-details');
 const searchInput = document.getElementById('search');
 const sortBySelect = document.getElementById('sort-by');
 const sortDirectionSelect = document.getElementById('sort-direction');
 const lastUpdatedLabel = document.getElementById('last-updated');
+const mobileMedia = typeof window !== 'undefined' ? window.matchMedia('(max-width: 640px)') : null;
+
+function setDetailsOpen(details, open) {
+    if (!details) return;
+    details.open = open;
+    if (open) details.setAttribute?.('open', '');
+    else details.removeAttribute?.('open');
+}
+
+function isMobileViewport() {
+    return Boolean(mobileMedia?.matches);
+}
+
+function syncDetailsForViewport() {
+    if (!mobileMedia) return;
+    const open = !mobileMedia.matches;
+    [playerDetails, compareDetails, scoringDetails].forEach((details) => setDetailsOpen(details, open));
+}
 
 function escapeHtml(value) {
     return String(value ?? '')
@@ -1109,6 +1130,7 @@ leaderboardBody.addEventListener('click', (event) => {
     if (!row) return;
 
     state.selectedId = row.dataset.playerId;
+    if (isMobileViewport()) setDetailsOpen(playerDetails, true);
     render();
     selectedPlayerContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
 });
@@ -1135,5 +1157,8 @@ compareFilterSelect.addEventListener('change', (event) => {
     state.compareFilter = event.target.value;
     renderCompare();
 });
+
+syncDetailsForViewport();
+mobileMedia?.addEventListener?.('change', syncDetailsForViewport);
 
 loadData();

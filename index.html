@@ -54,54 +54,72 @@
         </section>
 
         <section class="panel player-panel">
-            <div class="panel-header">
-                <div>
-                    <p class="section-kicker">Selected Player</p>
-                    <h2>Prediction Review</h2>
+            <details id="player-details" class="mobile-details" open>
+                <summary>
+                    <span>Prediction Review</span>
+                    <small>Selected player picks</small>
+                </summary>
+                <div class="panel-header">
+                    <div>
+                        <p class="section-kicker">Selected Player</p>
+                        <h2>Prediction Review</h2>
+                    </div>
+                    <p class="muted">Green is right, red is wrong, gray is still pending.</p>
                 </div>
-                <p class="muted">Green is right, red is wrong, gray is still pending.</p>
-            </div>
-            <div id="selected-player" class="selected-player"></div>
+                <div id="selected-player" class="selected-player"></div>
+            </details>
         </section>
 
         <section class="panel compare-panel">
-            <div class="panel-header">
-                <div>
-                    <p class="section-kicker">Head To Head</p>
-                    <h2>Compare Picks</h2>
+            <details id="compare-details" class="mobile-details" open>
+                <summary>
+                    <span>Compare Picks</span>
+                    <small>Head to head</small>
+                </summary>
+                <div class="panel-header">
+                    <div>
+                        <p class="section-kicker">Head To Head</p>
+                        <h2>Compare Picks</h2>
+                    </div>
+                    <p class="muted">Spot shared instincts and risky disagreements.</p>
                 </div>
-                <p class="muted">Spot shared instincts and risky disagreements.</p>
-            </div>
-            <div class="compare-controls">
-                <label class="input-wrap">
-                    <span>Player A</span>
-                    <select id="compare-a"></select>
-                </label>
-                <label class="input-wrap">
-                    <span>Player B</span>
-                    <select id="compare-b"></select>
-                </label>
-                <label class="input-wrap">
-                    <span>View</span>
-                    <select id="compare-filter">
-                        <option value="all">All picks</option>
-                        <option value="different">Differences only</option>
-                        <option value="same">Same picks only</option>
-                    </select>
-                </label>
-            </div>
-            <div id="compare-output" class="compare-output"></div>
+                <div class="compare-controls">
+                    <label class="input-wrap">
+                        <span>Player A</span>
+                        <select id="compare-a"></select>
+                    </label>
+                    <label class="input-wrap">
+                        <span>Player B</span>
+                        <select id="compare-b"></select>
+                    </label>
+                    <label class="input-wrap">
+                        <span>View</span>
+                        <select id="compare-filter">
+                            <option value="all">All picks</option>
+                            <option value="different">Differences only</option>
+                            <option value="same">Same picks only</option>
+                        </select>
+                    </label>
+                </div>
+                <div id="compare-output" class="compare-output"></div>
+            </details>
         </section>
 
         <section class="panel scoring-panel">
-            <div class="panel-header">
-                <div>
-                    <p class="section-kicker">Scoring</p>
-                    <h2>Point system</h2>
+            <details id="scoring-details" class="mobile-details" open>
+                <summary>
+                    <span>Point System</span>
+                    <small>Scoring rules</small>
+                </summary>
+                <div class="panel-header">
+                    <div>
+                        <p class="section-kicker">Scoring</p>
+                        <h2>Point system</h2>
+                    </div>
+                    <p class="muted">Update results in JSON as the tournament progresses.</p>
                 </div>
-                <p class="muted">Update results in JSON as the tournament progresses.</p>
-            </div>
-            <div id="scoring-rules" class="rules-grid"></div>
+                <div id="scoring-rules" class="rules-grid"></div>
+            </details>
         </section>
     </main>
 
