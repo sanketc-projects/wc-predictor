@@ -88,6 +88,13 @@ function shortTeam(teamOrCode) {
     return code || 'TBD';
 }
 
+function bracketTeamName(teamOrCode) {
+    if (!teamOrCode) return 'TBD';
+    const code = typeof teamOrCode === 'string' ? normalizeCode(teamOrCode) : normalizeCode(teamOrCode.code);
+    const team = typeof teamOrCode === 'string' ? state.teamsByCode.get(code) : teamOrCode;
+    return team?.name || code || 'TBD';
+}
+
 function rankLabel(rank) {
     return rank === '1' ? '1st' : rank === '2' ? '2nd' : '3rd';
 }
@@ -539,10 +546,10 @@ function playerMatchCard(item, options = {}) {
         <article class="bracket-card is-${item.status}${muted}">
             <div class="bracket-card-code">${escapeHtml(item.label)}</div>
             <div class="match-teams">
-                <span class="team-line${normalizeCode(item.home?.code) === normalizeCode(item.winner?.code) ? ' is-picked' : ''}">${escapeHtml(shortTeam(item.home))}</span>
-                <span class="team-line${normalizeCode(item.away?.code) === normalizeCode(item.winner?.code) ? ' is-picked' : ''}">${escapeHtml(shortTeam(item.away))}</span>
+                <span class="team-line${normalizeCode(item.home?.code) === normalizeCode(item.winner?.code) ? ' is-picked' : ''}">${escapeHtml(bracketTeamName(item.home))}</span>
+                <span class="team-line${normalizeCode(item.away?.code) === normalizeCode(item.winner?.code) ? ' is-picked' : ''}">${escapeHtml(bracketTeamName(item.away))}</span>
             </div>
-            ${item.actual ? `<span class="bracket-card-result">${escapeHtml(shortTeam(item.actual))}</span>` : ''}
+            ${item.actual ? `<span class="bracket-card-result">${escapeHtml(bracketTeamName(item.actual))}</span>` : ''}
         </article>
     `;
 }
@@ -774,9 +781,9 @@ function compareRows(playerA, playerB) {
         rows.push({
             stage: match.stage,
             label: match.code,
-            a: shortTeam(aPick),
-            b: shortTeam(bPick),
-            actual: actualCode ? shortTeam(actualCode) : 'Pending',
+            a: bracketTeamName(aPick),
+            b: bracketTeamName(bPick),
+            actual: actualCode ? bracketTeamName(actualCode) : 'Pending',
             same: normalizeCode(aPick?.code) === normalizeCode(bPick?.code),
             aStatus: pickStatus(aPick?.code, actualCode),
             bStatus: pickStatus(bPick?.code, actualCode),
