@@ -227,6 +227,10 @@ select option {
     margin-top: 12px;
 }
 
+.leaderboard-table-head {
+    display: none;
+}
+
 .leaderboard-row {
     width: 100%;
     border: 1px solid rgba(232, 242, 218, 0.1);
@@ -1234,29 +1238,60 @@ select option {
     }
 
     .leaderboard-list {
-        gap: 4px;
+        background: rgba(248, 247, 239, 0.045);
+        border: 1px solid rgba(248, 247, 239, 0.1);
+        border-radius: 12px;
+        gap: 0;
         margin-top: 8px;
+        overflow: hidden;
+    }
+
+    .leaderboard-table-head {
+        color: var(--muted);
+        display: grid;
+        font-size: 0.62rem;
+        font-weight: 900;
+        grid-template-columns: 38px minmax(0, 1fr) 44px;
+        letter-spacing: 0.08em;
+        padding: 6px 7px;
+        text-transform: uppercase;
+    }
+
+    .leaderboard-table-head span:last-child {
+        text-align: right;
     }
 
     .leaderboard-row {
         align-items: center;
-        border-radius: 9px;
-        gap: 5px;
-        grid-template-columns: 32px minmax(0, 1fr) 42px;
-        min-height: 34px;
-        padding: 3px 5px;
+        background: transparent;
+        border: 0;
+        border-radius: 0;
+        border-top: 1px solid rgba(248, 247, 239, 0.08);
+        gap: 6px;
+        grid-template-columns: 38px minmax(0, 1fr) 44px;
+        min-height: 32px;
+        padding: 4px 7px;
+    }
+
+    .leaderboard-row:hover,
+    .leaderboard-row.is-selected {
+        background: rgba(117, 214, 107, 0.12);
+        transform: none;
     }
 
     .rank-badge {
-        border-radius: 7px;
-        font-size: 0.68rem;
-        min-height: 25px;
-        min-width: 28px;
-        padding: 0 4px;
+        background: transparent;
+        border: 0;
+        border-radius: 0;
+        font-size: 0.74rem;
+        justify-content: flex-start;
+        min-height: auto;
+        min-width: 0;
+        padding: 0;
     }
 
     .player-summary strong {
-        font-size: 0.78rem;
+        font-size: 0.8rem;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -1270,7 +1305,7 @@ select option {
     .score-badge {
         align-items: baseline;
         display: flex;
-        font-size: 0.95rem;
+        font-size: 0.86rem;
         gap: 2px;
         justify-content: flex-end;
         text-align: right;

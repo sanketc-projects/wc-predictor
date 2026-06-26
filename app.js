@@ -393,7 +393,13 @@ function renderLeaderboard(entries) {
         return;
     }
 
-    leaderboardBody.innerHTML = entries
+        leaderboardBody.innerHTML = `
+            <div class="leaderboard-table-head" aria-hidden="true">
+                <span>Rank</span>
+                <span>Player</span>
+                <span>Pts</span>
+            </div>
+        ` + entries
         .map((entry) => {
             const active = entry.id === state.selectedId ? ' is-selected' : '';
             return `
