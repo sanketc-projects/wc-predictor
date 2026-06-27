@@ -393,7 +393,7 @@ function renderLeaderboard(entries) {
         return;
     }
 
-        leaderboardBody.innerHTML = `
+    leaderboardBody.innerHTML = `
             <table class="leaderboard-table">
                 <thead>
                     <tr>
@@ -406,8 +406,8 @@ function renderLeaderboard(entries) {
                 </thead>
                 <tbody>
                     ${entries.map((entry) => {
-            const active = entry.id === state.selectedId ? ' is-selected' : '';
-            return `
+        const active = entry.id === state.selectedId ? ' is-selected' : '';
+        return `
                             <tr class="leaderboard-row${active}" data-player-id="${escapeHtml(entry.id)}">
                                 <td class="rank-cell">#${entry.rank}</td>
                                 <td class="player-cell">
@@ -418,7 +418,7 @@ function renderLeaderboard(entries) {
                                 <td class="breakdown-cell desktop-only"><div class="row-breakdown">${renderBreakdown(entry)}</div></td>
                             </tr>
                         `;
-                }).join('')}
+    }).join('')}
                 </tbody>
             </table>
         `;
@@ -588,6 +588,49 @@ function playerMatchCard(item, options = {}) {
     `;
 }
 
+function groupedPairs(items, isVisible) {
+    const pairs = [];
+
+    for (let index = 0; index < items.length; index += 2) {
+        const pair = items.slice(index, index + 2);
+        if (pair.some(isVisible)) pairs.push(pair);
+    }
+
+    return pairs;
+}
+
+function renderPlayerRoundColumn(title, items) {
+    const pairs = groupedPairs(items, (item) => item && statusMatchesFilter(item.status));
+
+    if (!pairs.length) return '';
+
+    return `
+        <section class="bracket-round-column">
+            <h4>${title}</h4>
+            <div class="bracket-round-pairs">
+                ${pairs.map((pair) => `
+                    <div class="round-pair">
+                        ${pair.map((item) => playerMatchCard(item, { muted: item && !statusMatchesFilter(item.status) })).join('')}
+                    </div>
+                `).join('')}
+            </div>
+        </section>
+    `;
+}
+
+function orderedPlayerRoundItems(itemsByCode, stage) {
+    return state.source.matches
+        .filter((match) => match.stage === stage)
+        .sort(byMatchNumber)
+        .map((match) => itemsByCode.get(match.code))
+        .filter(Boolean);
+}
+
+function renderPlayerMedalColumn(itemsByCode) {
+    const items = ['M104', 'M103'].map((code) => itemsByCode.get(code)).filter(Boolean);
+    return renderPlayerRoundColumn('Medal matches', items);
+}
+
 function renderPlayerBracketLane(title, targetStage, itemsByCode) {
     const targets = state.source.matches
         .filter((match) => match.stage === targetStage)
@@ -708,10 +751,11 @@ function renderThirdPredictions(player) {
 function renderKnockoutBracket(player) {
     const itemsByCode = knockoutItemsByCode(player);
     const sections = [
-        renderPlayerBracketLane('Round of 32 to Round of 16', 'r16', itemsByCode),
-        renderPlayerBracketLane('Round of 16 to Quarterfinals', 'qf', itemsByCode),
-        renderPlayerBracketLane('Quarterfinals to Semifinals', 'sf', itemsByCode),
-        renderPlayerFinalLane(itemsByCode),
+        renderPlayerRoundColumn('Round of 32', orderedPlayerRoundItems(itemsByCode, 'r32')),
+        renderPlayerRoundColumn('Round of 16', orderedPlayerRoundItems(itemsByCode, 'r16')),
+        renderPlayerRoundColumn('Quarterfinals', orderedPlayerRoundItems(itemsByCode, 'qf')),
+        renderPlayerRoundColumn('Semifinals', orderedPlayerRoundItems(itemsByCode, 'sf')),
+        renderPlayerMedalColumn(itemsByCode),
     ].filter(Boolean);
 
     if (!sections.length) {
@@ -721,7 +765,7 @@ function renderKnockoutBracket(player) {
     return `
         <section class="prediction-stage">
             <h3>Knockout bracket</h3>
-            <div class="bracket-lane-board">${sections.join('')}</div>
+            <div class="bracket-round-board">${sections.join('')}</div>
         </section>
     `;
 }
@@ -1010,13 +1054,46 @@ function renderCompareFinalLane(rowsByCode) {
     `;
 }
 
+function orderedCompareRoundRows(rowsByCode, stage) {
+    return state.source.matches
+        .filter((match) => match.stage === stage)
+        .sort(byMatchNumber)
+        .map((match) => rowsByCode.get(match.code))
+        .filter(Boolean);
+}
+
+function renderCompareRoundColumn(title, rows) {
+    const pairs = groupedPairs(rows, (row) => row && comparisonPassesFilter(row.same));
+
+    if (!pairs.length) return '';
+
+    return `
+        <section class="bracket-round-column compare-round-column">
+            <h4>${title}</h4>
+            <div class="bracket-round-pairs">
+                ${pairs.map((pair) => `
+                    <div class="round-pair">
+                        ${pair.map((row) => compareMatchCard(row, { muted: row && !comparisonPassesFilter(row.same) })).join('')}
+                    </div>
+                `).join('')}
+            </div>
+        </section>
+    `;
+}
+
+function renderCompareMedalColumn(rowsByCode) {
+    const rows = ['M104', 'M103'].map((code) => rowsByCode.get(code)).filter(Boolean);
+    return renderCompareRoundColumn('Medal matches', rows);
+}
+
 function renderCompareBracket(rows) {
     const rowsByCode = compareRowsByCode(rows);
     const sections = [
-        renderCompareLane('Round of 32 to Round of 16', 'r16', rowsByCode),
-        renderCompareLane('Round of 16 to Quarterfinals', 'qf', rowsByCode),
-        renderCompareLane('Quarterfinals to Semifinals', 'sf', rowsByCode),
-        renderCompareFinalLane(rowsByCode),
+        renderCompareRoundColumn('Round of 32', orderedCompareRoundRows(rowsByCode, 'r32')),
+        renderCompareRoundColumn('Round of 16', orderedCompareRoundRows(rowsByCode, 'r16')),
+        renderCompareRoundColumn('Quarterfinals', orderedCompareRoundRows(rowsByCode, 'qf')),
+        renderCompareRoundColumn('Semifinals', orderedCompareRoundRows(rowsByCode, 'sf')),
+        renderCompareMedalColumn(rowsByCode),
     ].filter(Boolean);
 
     if (!sections.length) return '';
@@ -1024,7 +1101,7 @@ function renderCompareBracket(rows) {
     return `
         <section class="compare-section">
             <h3>Knockout bracket</h3>
-            <div class="bracket-lane-board">${sections.join('')}</div>
+            <div class="bracket-round-board">${sections.join('')}</div>
         </section>
     `;
 }
