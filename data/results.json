@@ -31,6 +31,16 @@
             "NED",
             "JPN",
             "SWE"
+        ],
+        "H": [
+            "ESP",
+            "CPV",
+            "URU"
+        ],
+        "I": [
+            "FRA",
+            "NOR",
+            "SEN"
         ]
     },
     "thirdAdvancers": [],
