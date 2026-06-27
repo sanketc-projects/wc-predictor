@@ -36,9 +36,6 @@ const state = {
     source: null,
     matchStages: new Map(),
     teamsByCode: new Map(),
-    sortBy: 'score',
-    sortDirection: 'desc',
-    query: '',
     selectedId: '',
     predictionFilter: 'all',
     compareA: '',
@@ -52,14 +49,10 @@ const compareASelect = document.getElementById('compare-a');
 const compareBSelect = document.getElementById('compare-b');
 const compareFilterSelect = document.getElementById('compare-filter');
 const compareOutput = document.getElementById('compare-output');
-const summaryContainer = document.getElementById('summary');
 const scoringRulesContainer = document.getElementById('scoring-rules');
 const playerDetails = document.getElementById('player-details');
 const compareDetails = document.getElementById('compare-details');
 const scoringDetails = document.getElementById('scoring-details');
-const searchInput = document.getElementById('search');
-const sortBySelect = document.getElementById('sort-by');
-const sortDirectionSelect = document.getElementById('sort-direction');
 const lastUpdatedLabel = document.getElementById('last-updated');
 const mobileMedia = typeof window !== 'undefined' ? window.matchMedia('(max-width: 640px)') : null;
 
@@ -122,33 +115,6 @@ function rankLabel(rank) {
 
 function statusMatchesFilter(status) {
     return state.predictionFilter === 'all' || status === state.predictionFilter;
-}
-
-function compareValues(a, b) {
-    const direction = state.sortDirection === 'asc' ? 1 : -1;
-
-    if (state.sortBy === 'name') {
-        return a.name.localeCompare(b.name) * direction;
-    }
-
-    const aValue = a[state.sortBy] ?? 0;
-    const bValue = b[state.sortBy] ?? 0;
-
-    if (aValue === bValue) {
-        return a.rank - b.rank || a.name.localeCompare(b.name);
-    }
-
-    return (aValue > bValue ? 1 : -1) * direction;
-}
-
-function entriesMatchingQuery(entries) {
-    const query = state.query.trim().toLowerCase();
-    if (!query) return entries.slice();
-    return entries.filter((entry) => entry.name.toLowerCase().includes(query));
-}
-
-function filteredEntries() {
-    return entriesMatchingQuery(state.entries).sort(compareValues);
 }
 
 function rankedEntries() {
@@ -347,37 +313,6 @@ function buildPredictionItems(player) {
     });
 
     return items;
-}
-
-function renderSummary(entries) {
-    if (!entries.length) {
-        summaryContainer.innerHTML = '<div class="summary-card"><span>No matches</span><strong>Try another search</strong></div>';
-        return;
-    }
-
-    const leaders = entries.filter((entry) => entry.rank === entries[0].rank);
-    const averageScore = Math.round(entries.reduce((sum, entry) => sum + entry.score, 0) / entries.length);
-    const maxCorrect = Math.max(...entries.map((entry) => entry.correctPicks));
-    const available = maxAvailablePoints();
-
-    summaryContainer.innerHTML = `
-    <div class="summary-card leader-card">
-      <span>Leader${leaders.length > 1 ? 's' : ''}</span>
-      <strong>${leaders.map((entry) => escapeHtml(entry.name)).join(', ')}</strong>
-    </div>
-    <div class="summary-card">
-      <span>Average</span>
-      <strong>${averageScore}</strong>
-    </div>
-    <div class="summary-card">
-      <span>Best correct</span>
-      <strong>${maxCorrect}</strong>
-    </div>
-    <div class="summary-card">
-      <span>Available</span>
-      <strong>${available}</strong>
-    </div>
-  `;
 }
 
 function renderBreakdown(entry) {
@@ -1156,8 +1091,7 @@ function renderScoringRules() {
 }
 
 function render() {
-    const entries = filteredEntries();
-    renderSummary(rankedEntries());
+    const entries = rankedEntries();
     renderLeaderboard(entries);
     renderSelectedPlayer();
     renderCompare();
@@ -1199,21 +1133,6 @@ async function loadData() {
         render();
     }
 }
-
-searchInput.addEventListener('input', (event) => {
-    state.query = event.target.value;
-    render();
-});
-
-sortBySelect.addEventListener('change', (event) => {
-    state.sortBy = event.target.value;
-    render();
-});
-
-sortDirectionSelect.addEventListener('change', (event) => {
-    state.sortDirection = event.target.value;
-    render();
-});
 
 leaderboardBody.addEventListener('click', (event) => {
     const row = event.target.closest('[data-player-id]');
