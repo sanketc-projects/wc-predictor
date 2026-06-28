@@ -46,8 +46,32 @@
             "FRA",
             "NOR",
             "SEN"
+        ],
+        "J": [
+            "ARG",
+            "AUT",
+            "ALG"
+        ],
+        "K": [
+            "COL",
+            "POR",
+            "COD"
+        ],
+        "L": [
+            "ENG",
+            "CRO",
+            "GHA"
         ]
     },
-    "thirdAdvancers": [],
+    "thirdAdvancers": [
+        "BIH",
+        "PAR",
+        "ECU",
+        "SWE",
+        "SEN",
+        "ALG",
+        "COD",
+        "GHA"
+    ],
     "matches": {}
 }
