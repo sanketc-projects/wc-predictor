@@ -174,12 +174,11 @@ function calculatePlayerScore(player, context) {
                 addPoints(entry, 'groupTopTwo', context.rules.groupTopTwo);
             }
         }
-    }
 
-    for (const group of player.picks.thirdAdvancers || []) {
-        const predictedThirdCode = normalizeCode(player.picks.group[group]?.['3']?.code);
+        const actualThirdCode = normalizeCode(placements[2]);
+        const pickedThirdCode = normalizeCode(predictedGroup['3']?.code);
 
-        if (predictedThirdCode && thirdAdvancers.has(predictedThirdCode)) {
+        if (actualThirdCode && thirdAdvancers.has(actualThirdCode) && pickedThirdCode === actualThirdCode) {
             addPoints(entry, 'thirdAdvances', context.rules.thirdAdvances);
         }
     }
@@ -251,7 +250,7 @@ function buildPredictionItems(player) {
         for (const rank of ['1', '2', '3']) {
             const pickedTeam = predictedGroup[rank];
             const actualCode = actualPlacements[Number(rank) - 1];
-            const scored = rank !== '3';
+            const scored = rank !== '3' || actualThirdAdvancerCodes(state.results).has(normalizeCode(actualCode));
             items.push({
                 id: `group-${group}-${rank}`,
                 stage: 'group',
@@ -259,25 +258,10 @@ function buildPredictionItems(player) {
                 picked: formatTeam(pickedTeam),
                 actual: actualCode ? formatTeam(actualCode) : 'Awaiting result',
                 status: pickStatus(pickedTeam?.code, actualCode),
-                points: scored && normalizeCode(pickedTeam?.code) === normalizeCode(actualCode) ? state.rules.groupTopTwo : 0,
-                muted: !scored,
+                points: scored && normalizeCode(pickedTeam?.code) === normalizeCode(actualCode) ? (rank === '3' ? state.rules.thirdAdvances : state.rules.groupTopTwo) : 0,
+                muted: rank === '3' && !scored,
             });
         }
-    }
-
-    const thirdCodes = actualThirdAdvancerCodes(state.results);
-    for (const group of player.picks.thirdAdvancers || []) {
-        const pickedTeam = player.picks.group[group]?.['3'];
-        const status = thirdCodes.size ? (thirdCodes.has(normalizeCode(pickedTeam?.code)) ? 'correct' : 'wrong') : 'pending';
-        items.push({
-            id: `third-${group}`,
-            stage: 'thirdAdvances',
-            label: `Best third · Group ${group}`,
-            picked: formatTeam(pickedTeam),
-            actual: thirdCodes.size ? 'Advanced list decided' : 'Awaiting best third-place teams',
-            status,
-            points: status === 'correct' ? state.rules.thirdAdvances : 0,
-        });
     }
 
     const knockoutMatches = state.source.matches
@@ -378,7 +362,7 @@ function buildGroupRows(player) {
         const cells = ['1', '2', '3'].map((rank) => {
             const pickedTeam = predictedGroup[rank];
             const actualCode = actualPlacements[Number(rank) - 1];
-            const scored = rank !== '3';
+            const scored = rank !== '3' || actualThirdAdvancerCodes(state.results).has(normalizeCode(actualCode));
             const status = pickStatus(pickedTeam?.code, actualCode);
 
             return {
@@ -387,8 +371,8 @@ function buildGroupRows(player) {
                 picked: formatTeam(pickedTeam),
                 actual: actualCode ? formatTeam(actualCode) : 'Awaiting result',
                 status,
-                points: scored && normalizeCode(pickedTeam?.code) === normalizeCode(actualCode) ? state.rules.groupTopTwo : 0,
-                muted: !scored,
+                points: scored && normalizeCode(pickedTeam?.code) === normalizeCode(actualCode) ? (rank === '3' ? state.rules.thirdAdvances : state.rules.groupTopTwo) : 0,
+                muted: rank === '3' && !scored,
             };
         });
 
