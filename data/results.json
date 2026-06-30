@@ -76,6 +76,7 @@
     "matches": {
         "M73": "PAR",
         "M75": "CAN",
+        "M76": "MAR",
         "M81": "BRA"
     }
 }
